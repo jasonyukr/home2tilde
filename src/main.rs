@@ -7,7 +7,7 @@ fn main() {
     let home_dir = env::var("HOME").unwrap();
     
     // Regex to match escape sequences
-    let escape_seq_re = Regex::new(r"\x1B\[[0-?]*[ -/]*[@-~]").unwrap();
+    let escape_seq_re = Regex::new(r"\x1B\[[0-9;]*m$").unwrap();
     
     // Read from stdin
     let stdin = io::stdin();
