@@ -60,6 +60,10 @@ fn convert_home_path(input_str: &str, homedir: &str) -> Option<String> {
         }
     }
 
+    if home_dir.len() > 0 {
+        return None;
+    }
+
     match String::from_utf8(result) {
         Ok(str) => Some(str),
         Err(_e) => None,
