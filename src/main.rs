@@ -23,6 +23,7 @@ fn convert_home_path(input_str: &str, homedir: &str) -> Option<String> {
                     state = State::Escape;
                     result.push(b); // append ESC byte
                 } else {
+                    //////////////////////////////////////////////
                     if home_dir.len() > 0 {
                         let first_char_u8 = home_dir.chars().next().unwrap() as u8;
                         if first_char_u8 != b {
@@ -36,6 +37,7 @@ fn convert_home_path(input_str: &str, homedir: &str) -> Option<String> {
                     } else {
                         result.push(b); // write normal byte to result
                     }
+                    //////////////////////////////////////////////
                 }
             }
             State::Escape => {
