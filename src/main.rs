@@ -13,7 +13,7 @@ fn convert_home_path(input_str: &str, homedir: &str) -> Option<String> {
     let input = input_str.as_bytes();
     let mut home_dir = homedir;
 
-    let mut result = Vec::new();
+    let mut result = Vec::with_capacity(input_str.len());
     let mut state = State::Normal;
     let mut init_done = false;
 
