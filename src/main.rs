@@ -1,5 +1,6 @@
 use std::env;
-use std::io::{self, BufRead};
+use std::io::{self, BufRead, Write};
+use std::process;
 
 #[derive(Debug)]
 enum State {
@@ -71,7 +72,7 @@ fn convert_home_path(input_str: &str, homedir: &str) -> Option<String> {
 }
 
 fn main() {
-    // Get the user's home directory
+    let mut stdout = io::stdout();
     let home_dir = env::var("HOME").unwrap();
 
     let mut args = env::args();
@@ -80,20 +81,28 @@ fn main() {
         args.next(); // skip exec name
 
         for arg in args {
+            let res;
             if let Some(converted) = convert_home_path(&arg, &home_dir) {
-                println!("{}", converted);
+                res = writeln!(stdout, "{}", converted);
             } else {
-                println!("{}", arg);
+                res = writeln!(stdout, "{}", arg);
+            }
+            if let Err(_) = res {
+                process::exit(1);
             }
         }
     } else {
         let stdin = io::stdin();
         for line in stdin.lock().lines() {
             if let Ok(ln) = line {
+                let res;
                 if let Some(converted) = convert_home_path(&ln, &home_dir) {
-                    println!("{}", converted);
+                    res = writeln!(stdout, "{}", converted);
                 } else {
-                    println!("{}", ln);
+                    res = writeln!(stdout, "{}", ln);
+                }
+                if let Err(_) = res {
+                    process::exit(1);
                 }
             }
         }
