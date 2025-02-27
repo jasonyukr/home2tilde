@@ -74,13 +74,27 @@ fn main() {
     // Get the user's home directory
     let home_dir = env::var("HOME").unwrap();
 
-    let stdin = io::stdin();
-    for line in stdin.lock().lines() {
-        if let Ok(ln) = line {
-            if let Some(converted) = convert_home_path(&ln, &home_dir) {
+    let mut args = env::args();
+
+    if args.len() >= 2 {
+        args.next(); // skip exec name
+
+        for arg in args {
+            if let Some(converted) = convert_home_path(&arg, &home_dir) {
                 println!("{}", converted);
             } else {
-                println!("{}", ln);
+                println!("{}", arg);
+            }
+        }
+    } else {
+        let stdin = io::stdin();
+        for line in stdin.lock().lines() {
+            if let Ok(ln) = line {
+                if let Some(converted) = convert_home_path(&ln, &home_dir) {
+                    println!("{}", converted);
+                } else {
+                    println!("{}", ln);
+                }
             }
         }
     }
